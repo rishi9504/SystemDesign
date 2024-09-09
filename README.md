@@ -97,7 +97,7 @@ All the combinations available are:
 
 
 
-<h1 align="center">The System Design Cheat Sheet</h1>
+**The System Design Cheat Sheet**
 
 
 | Use Cases/Problems                                                                                                                 | System Design Questions                                                                                     | ⭐ Component                      | What it solves                                                  | Caveats/Issues                                      | Mitigations                                                                                                                                        | Examples of Tools                           |
