@@ -1,6 +1,38 @@
 # SystemDesign
 All things related to system design.
 
+## How to improve API performance?
+Pagination, async logging, caching, payload compression, connection pool
+
+## What is a CI/CD Pipeline?
+
+## Types of memory and storage----
+
+## SQL Query execution Order?
+
+## How to design effective and safe APIs?
+
+Use resource names(nouns)
+Use Plurals
+Idempotency
+Use versioning
+Query after soft deletion
+pagination
+Sorting
+Filtering
+Secure Access
+Resource cross reference
+Add an item to a cart
+Rate limit
+
+## What is SSO? How do we use SSO?
+
+## State system design acronyms.
+CAP 
+BASE
+SOLID
+KISS 
+
 ## What is availability and partition tolerance?
 
 Availability and partition tolerance are two properties of a distributed system. The CAP theorem states that a distributed system can only provide two of the following properties at the same time: 
