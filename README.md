@@ -1,6 +1,8 @@
 # SystemDesign
 All things related to system design.
 
+[Awesome System Design Resources](https://github.com/rishi9504/SystemDesign/blob/main/awesomeSysDesign.md)
+
 ## Design following systems:
 
 Discord
