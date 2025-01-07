@@ -11,6 +11,7 @@
 - Google search
 - Netflix
 - Reddit
+- Uber : [Uber](![image](https://github.com/user-attachments/assets/cb39c964-c4ea-42a5-8b93-3f8517076c19)
 
 **The System Design Cheat Sheet**
 
