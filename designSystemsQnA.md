@@ -11,7 +11,10 @@
 - Google search
 - Netflix
 - Reddit
-- Uber : [Uber](![image](https://github.com/user-attachments/assets/cb39c964-c4ea-42a5-8b93-3f8517076c19)
+- Uber : [Uber](https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber)
+
+- ![7d9ec3dbaa245e568ad98d2274a21015](https://github.com/user-attachments/assets/887f31b7-e274-4756-8247-f5d112db4b78)
+
 
 **The System Design Cheat Sheet**
 
