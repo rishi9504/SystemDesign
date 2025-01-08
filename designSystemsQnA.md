@@ -11,7 +11,7 @@
 - Google search
 - Netflix
 - Reddit
-- Uber : [Uber](https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber) [ChatGPT discussion](https://chatgpt.com/share/677ea380-a748-8000-ac84-711e77054f9c)
+- Uber : [Uber](https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber) [Detailed Questions Readme]()
 
 - ![7d9ec3dbaa245e568ad98d2274a21015](https://github.com/user-attachments/assets/887f31b7-e274-4756-8247-f5d112db4b78)
 
