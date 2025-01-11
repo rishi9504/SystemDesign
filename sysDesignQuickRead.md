@@ -1,12 +1,12 @@
 ## What are database locks?
-Shared Lock
-Exclusive Lock
-Update Lock
-Schema Lock
-Bulk Update Lock
-Key Range Lock
-Row Level Lock
-Table Level Lock
+- Shared Lock
+- Exclusive Lock
+- Update Lock
+- Schema Lock
+- Bulk Update Lock
+- Key Range Lock
+- Row Level Lock
+- Table Level Lock
 
 
 
@@ -14,7 +14,11 @@ Table Level Lock
 
 
 ## How to improve API performance?
-Pagination, async logging, caching, payload compression, connection pool
+- Pagination
+- async logging
+- caching
+- payload compression
+- connection pool
 
 ## What is a CI/CD Pipeline?
 
@@ -24,26 +28,77 @@ Pagination, async logging, caching, payload compression, connection pool
 
 ## How to design effective and safe APIs?
 
-Use resource names(nouns)
-Use Plurals
-Idempotency
-Use versioning
-Query after soft deletion
-pagination
-Sorting
-Filtering
-Secure Access
-Resource cross reference
-Add an item to a cart
-Rate limit
+- Use resource names(nouns)
+- Use Plurals
+- Idempotency
+- Use versioning
+- Query after soft deletion
+- pagination
+- Sorting
+- Filtering
+- Secure Access
+- Resource cross reference
+- Add an item to a cart
+- Rate limit
 
 ## What is SSO? How do we use SSO?
 
+## Describe following terms:
+
+- Throughput
+- Response time
+- Latency
+- Tail latencies
+- Service level Objectives (SLO)
+- Service Level Agreement (SLA)
+- Tail Latency Amplification
+- Scaling up
+- Scaling down
+- Shared nothing Architecture
+
+
+
+## Three design principle for System Designs:
+- Operability
+- Simplicity
+- Evolvability
+
+## Possible symptoms of complexity:
+page 43 ddia
+
+# Functional requirements
+- what should the app do
+- data storage
+- data retrieval
+- data search
+- data processing
+
+# types of data models
+- relational models
+- network models
+- hiearchial models
+
+
+# ployglot persistence
+
+# impedence mismatch
+
+# How exaactly indexing work in the databases
+
+# Twitter arch for assembling home timeline
+
+
+## What is load parameter in System?
+
+## What is fan out in System Design?
+
+
+
 ## State system design acronyms.
-CAP 
-BASE
-SOLID
-KISS 
+- CAP 
+- BASE
+- SOLID
+- KISS 
 
 ## What is availability and partition tolerance?
 
