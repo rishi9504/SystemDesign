@@ -13,3 +13,7 @@ External Links:
 [System Design Fight Club](https://github.com/systemdesignfightclub/SDFC/tree/main) : An awesome collection of system design materials.
 
 [LLD Blogs](https://www.lldcoding.com/)
+
+[System Design Primer](https://github.com/donnemartin/system-design-primer)
+
+[Alphabetically company Engg Blogs](https://github.com/kilimchoi/engineering-blogs)
