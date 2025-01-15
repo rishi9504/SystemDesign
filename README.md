@@ -11,3 +11,5 @@ All things related to system design.
 External Links:
 
 [System Design Fight Club](https://github.com/systemdesignfightclub/SDFC/tree/main) : An awesome collection of system design materials.
+
+[LLD Blogs](https://www.lldcoding.com/)
