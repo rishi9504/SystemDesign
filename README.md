@@ -7,3 +7,7 @@ All things related to system design.
 [System Design Quick Read](https://github.com/rishi9504/SystemDesign/blob/main/sysDesignQuickRead.md)
 
 [Design Question and Answers](https://github.com/rishi9504/SystemDesign/blob/main/designSystemsQnA.md)
+
+External Links:
+
+[System Design Fight Club](https://github.com/systemdesignfightclub/SDFC/tree/main) : An awesome collection of system design materials.
