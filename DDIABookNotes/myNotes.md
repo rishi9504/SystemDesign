@@ -35,6 +35,27 @@ type negotiation
 ## Shared nothing architecture
 ## semi-synchronous config
 ## read-after-write consistency, also known as read-your-writes consistency
+## consistent prefix reads
+## convergent conflict resolution
+## Leaderless replication
+
+- There has been some interesting research into automatically resolving conflicts
+caused by concurrent data modifications. A few lines of research are worth mention‐
+ing:
+• Conflict-free replicated datatypes (CRDTs)  are a family of data structures
+for sets, maps, ordered lists, counters, etc. that can be concurrently edited by
+multiple users, and which automatically resolve conflicts in sensible ways. Some
+CRDTs have been implemented in Riak 2.0
+• Mergeable persistent data structures  track history explicitly, similarly to the
+Git version control system, and use a three-way merge function (whereas CRDTs
+use two-way merges).
+• Operational transformation is the conflict resolution algorithm behind col‐
+laborative editing applications such as Etherpad and Google Docs . It
+was designed particularly for concurrent editing of an ordered list of items, such
+as the list of characters that constitute a text document.
+- Monotonic reads is a guarantee that this kind of anomaly does not happen. It’s a
+lesser guarantee than strong consistency, but a stronger guarantee than eventual con‐
+sistency. 
 
 
 - Replication means keeping a copy of the same data on multiple machines that are
