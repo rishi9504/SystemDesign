@@ -1,3 +1,56 @@
+
+## Three design principle for System Designs:
+- Operability
+- Simplicity
+- Evolvability
+
+## Possible symptoms of complexity:
+page 43 ddia
+
+# Functional requirements
+- what should the app do
+- data storage
+- data retrieval
+- data search
+- data processing
+
+# types of data models
+- relational models
+- network models
+- hiearchial models
+
+
+# ployglot persistence
+
+# impedence mismatch
+
+# How exaactly indexing work in the databases
+
+# Twitter arch for assembling home timeline
+
+
+## What is load parameter in System?
+
+## What is fan out in System Design?
+
+## Relational Technique of Shredding
+
+## Schema on read(document db) vs schema on write(relational)
+
+## Storage locality
+
+## imerative vs declrative code
+
+## Ways of structuring and querying data in graphs
+- property graphs
+- triple store model
+
+ ## CODASYL 
+
+ # how does index slow down writes but speed up the read
+
+ ## types of indexing in db's
+
 ## Vectorized processing in DataBases
 
 ## encoding (also known as serialization or marshalling)
