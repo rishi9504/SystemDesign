@@ -813,7 +813,7 @@ SSE is a lightweight and powerful tool for real-time data delivery when you need
 
 
 ## State system design acronyms.
-- CAP 
+ 
 - BASE
 - SOLID
 - KISS 
