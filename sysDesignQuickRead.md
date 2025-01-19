@@ -814,9 +814,269 @@ SSE is a lightweight and powerful tool for real-time data delivery when you need
 
 ## State system design acronyms.
  
-- BASE
-- SOLID
-- KISS 
+#### What do you mean by BASE in context of system design?
+In the context of **system design**, **BASE** is an acronym that stands for **Basically Available, Soft State, and Eventual Consistency**. It is a concept often associated with distributed systems, particularly those designed to achieve scalability and high availability. BASE contrasts with the ACID (Atomicity, Consistency, Isolation, Durability) properties typically found in relational databases.
+
+BASE systems are commonly used in modern distributed systems like NoSQL databases (e.g., Cassandra, DynamoDB) to prioritize availability and scalability over strict consistency.
+
+---
+
+### **Breaking Down BASE**
+
+#### **1. Basically Available**
+- The system guarantees **availability** of data even in the face of partial failures.
+- The system might not provide the most up-to-date or consistent data, but it ensures that some version of the data is always accessible.
+- **Example**: During a network partition, a database might serve stale data rather than becoming unavailable.
+
+#### **2. Soft State**
+- The state of the system may change over time, even without input from the client.
+- This means the system allows data to remain temporarily inconsistent, as it assumes that changes will propagate eventually to achieve a consistent state.
+- **Example**: Cache entries or replicas might not be immediately synchronized, leading to short-term inconsistencies.
+
+#### **3. Eventual Consistency**
+- The system guarantees that, given enough time and the absence of further updates, all replicas of the data will converge to the same value.
+- Eventual consistency sacrifices immediate consistency to ensure high availability and partition tolerance (as per the **CAP theorem**).
+- **Example**: In a distributed database, updates to a replica may take some time to propagate to all other replicas, but eventually, all replicas will agree on the same state.
+
+---
+
+### **BASE vs. ACID**
+
+| **Property**            | **BASE**                                             | **ACID**                                               |
+|--------------------------|-----------------------------------------------------|-------------------------------------------------------|
+| **Consistency**          | Eventual consistency.                               | Strong (immediate) consistency.                      |
+| **Availability**         | Prioritizes high availability.                      | May sacrifice availability to ensure consistency.     |
+| **Data Integrity**       | Tolerates temporary inconsistencies.                | Guarantees strict integrity constraints.             |
+| **Use Case**             | Distributed, scalable, real-time systems.           | Traditional relational databases and critical systems.|
+| **Examples**             | NoSQL databases (e.g., Cassandra, DynamoDB).        | SQL databases (e.g., PostgreSQL, MySQL).             |
+
+---
+
+### **When to Use BASE Systems**
+BASE is suitable for applications where:
+1. High **scalability** and **availability** are critical.
+2. **Latency tolerance** is acceptable (slightly stale data is fine).
+3. Eventual consistency is sufficient for business requirements.
+
+**Examples of BASE-Compatible Applications**:
+- Social media platforms (likes, shares, comments).
+- E-commerce platforms (product catalogs, inventory systems).
+- Content delivery systems (video streaming, CDN caches).
+
+---
+
+### **Challenges of BASE**
+1. **Complexity**: Managing eventual consistency and soft states can lead to intricate error handling and reconciliation logic.
+2. **Stale Data**: Users may occasionally see outdated information.
+3. **Data Convergence**: Ensuring eventual consistency across replicas can be challenging, especially in systems with high write loads.
+
+---
+
+BASE is a guiding principle for designing distributed systems that prioritize **availability**, **scalability**, and **resilience**. While it relaxes the strict guarantees of ACID, it provides the flexibility needed for systems operating in highly distributed and large-scale environments. Understanding when and how to use BASE is essential for effective system design in modern architectures.
+
+
+#### What do you mean by SOLID in context of system design?
+In the context of **system design** or **software design**, **SOLID** is an acronym for a set of **five principles** aimed at creating software that is easy to understand, maintain, and extend. Originally proposed by Robert C. Martin (Uncle Bob), these principles are primarily applicable to **object-oriented programming (OOP)** but can be adapted to other programming paradigms as well.
+
+---
+
+### **What Does SOLID Stand For?**
+
+#### **1. Single Responsibility Principle (SRP)**
+**Definition**: A class should have only one reason to change.
+
+- This means that a class should only be responsible for one functionality or purpose.
+- By adhering to SRP, you ensure that classes are focused, modular, and easier to test and maintain.
+
+**Example**:
+A `User` class should not handle both user authentication and user profile updates. Instead:
+- Create a `UserAuthentication` class for login-related tasks.
+- Create a `UserProfile` class for handling user profile data.
+
+---
+
+#### **2. Open/Closed Principle (OCP)**
+**Definition**: Software entities (classes, modules, functions) should be **open for extension but closed for modification**.
+
+- This means you should be able to add new functionality without modifying existing code.
+- Achieving OCP typically involves using interfaces, abstract classes, or dependency injection.
+
+**Example**:
+Suppose you have a `PaymentProcessor` class:
+- Instead of modifying it for every new payment method (e.g., `CreditCard`, `PayPal`, `Stripe`), use an interface like `PaymentMethod`.
+- Add new implementations for each payment type without changing the original `PaymentProcessor` class.
+
+---
+
+#### **3. Liskov Substitution Principle (LSP)**
+**Definition**: Objects of a superclass should be replaceable with objects of a subclass without altering the correctness of the program.
+
+- A subclass should honor the behavior expected of its superclass. Violating LSP often results in unexpected bugs when polymorphism is used.
+
+**Example**:
+If you have a `Bird` class with a `fly()` method, and you create a subclass `Penguin`, it violates LSP if `Penguin.fly()` doesn't make sense.
+- Instead, redesign your class hierarchy to separate "flying birds" from "non-flying birds."
+
+---
+
+#### **4. Interface Segregation Principle (ISP)**
+**Definition**: A class should not be forced to implement interfaces it does not use.
+
+- This principle promotes creating smaller, more specific interfaces rather than large, monolithic ones.
+
+**Example**:
+Instead of having a single `Vehicle` interface with methods like `drive()` and `fly()`, split it into:
+- `Driveable` interface with `drive()`.
+- `Flyable` interface with `fly()`.
+
+A car class implements `Driveable`, and an airplane class implements both `Driveable` and `Flyable`.
+
+---
+
+#### **5. Dependency Inversion Principle (DIP)**
+**Definition**: High-level modules should not depend on low-level modules; both should depend on abstractions.
+
+- Instead of having concrete dependencies in your code, rely on abstractions (e.g., interfaces) to make your system more flexible and testable.
+
+**Example**:
+Suppose a `DatabaseService` class depends directly on a `MySQLDatabase`. This violates DIP.
+- Instead, create a `Database` interface and let `MySQLDatabase` implement it.
+- Now, `DatabaseService` depends on the `Database` abstraction, not the specific implementation.
+
+---
+
+### **Benefits of SOLID Principles**
+1. **Improved Maintainability**: Code changes are less likely to break other parts of the system.
+2. **Ease of Testing**: Smaller, modular classes are easier to test.
+3. **Scalability**: Adding new features or components becomes simpler.
+4. **Enhanced Readability**: Clear responsibilities and well-structured code improve understanding for developers.
+5. **Reduced Technical Debt**: Following SOLID reduces the risk of design flaws that can accumulate over time.
+
+---
+
+### **SOLID in System Design**
+While SOLID principles are traditionally associated with application-level software design, they also influence system-level design by promoting:
+- **Microservices architecture**: Services are modular and serve specific responsibilities (SRP).
+- **Scalable APIs**: Adhering to OCP ensures new features don't break existing interfaces.
+- **Extensible systems**: Loose coupling and dependency inversion make distributed systems easier to extend.
+
+By adhering to SOLID principles, you create a robust foundation for systems that are **modular**, **scalable**, and **maintainable**, both at the code and architectural levels.
+#### What do you mean by KISS in context of system design? 
+
+In the context of **system design**, **KISS** stands for **"Keep It Simple, Stupid"** (or more politely, **"Keep It Simple and Straightforward"**). It is a design principle that emphasizes simplicity, clarity, and minimalism in solving problems and building systems.
+
+---
+
+### **What is the KISS Principle?**
+
+The KISS principle is based on the idea that **systems work best when they are kept simple rather than made unnecessarily complex**. Complexity often leads to:
+- Increased likelihood of bugs.
+- Difficulties in maintenance and debugging.
+- Harder onboarding for new team members.
+- Higher risk of failure due to over-engineering.
+
+The goal of KISS is to ensure that:
+1. **Solutions are straightforward**: Solve the problem in the most direct way possible.
+2. **Avoid unnecessary complexity**: Use the simplest tools, algorithms, and architectures that meet the requirements.
+
+---
+
+### **Key Aspects of KISS**
+
+1. **Minimalism in Design**:
+   - Avoid over-engineering and unnecessary abstractions.
+   - Example: Instead of creating multiple layers of APIs and services for a simple CRUD operation, use a single, well-documented endpoint.
+
+2. **Understandability**:
+   - The system should be easy for other developers and operators to understand and work with.
+   - Example: Use clear naming conventions and avoid overly complex code structures.
+
+3. **Practicality**:
+   - Focus on solving the current problem, not hypothetical future scenarios.
+   - Example: Don’t add features or design for scalability that isn't immediately necessary.
+
+4. **Maintainability**:
+   - Simple systems are easier to maintain, test, and debug.
+   - Example: Use straightforward error-handling mechanisms instead of intricate, nested exception hierarchies.
+
+---
+
+### **KISS in System Design**
+
+1. **Architecture**:
+   - Use **simple, modular architectures** such as microservices only if the system's complexity demands it. Avoid splitting services prematurely.
+   - Example: For a small app, a monolithic architecture may be simpler and more efficient than microservices.
+
+2. **APIs**:
+   - Design APIs with clear, minimal endpoints. Avoid adding unnecessary parameters or features.
+   - Example: A REST API with `/users/{id}` for fetching user details is simpler than creating multiple endpoints like `/users/getUserById`.
+
+3. **Technology Choices**:
+   - Choose tools and frameworks that are widely understood and easy to work with.
+   - Example: For a simple database requirement, a relational database like PostgreSQL may be more practical than adopting a complex distributed NoSQL solution.
+
+4. **Algorithms**:
+   - Implement algorithms that solve the problem effectively without unnecessary optimizations unless required.
+   - Example: Use a simple `O(n)` solution for a problem unless performance metrics demand more optimization.
+
+5. **Team Collaboration**:
+   - Simplify processes, workflows, and documentation so team members can quickly understand and contribute to the system.
+
+---
+
+### **Benefits of KISS**
+
+1. **Reduces Development Time**:
+   - Simpler systems are quicker to design and implement.
+2. **Improves Maintainability**:
+   - Easier for new developers to understand and extend the system.
+3. **Increases Reliability**:
+   - Fewer moving parts reduce the chances of errors and failures.
+4. **Encourages Focus**:
+   - Forces teams to prioritize the core functionality and avoid feature creep.
+5. **Enhances Scalability**:
+   - Simple systems are easier to scale by iterating on them incrementally.
+
+---
+
+### **When to Apply KISS**
+
+KISS is especially relevant in the following scenarios:
+1. **Early Stages of Development**:
+   - Avoid overcomplicating the system before understanding user needs.
+2. **Small Projects**:
+   - Simple systems are more appropriate for projects with limited scope and resources.
+3. **Prototyping**:
+   - Focus on building a working prototype quickly without overengineering.
+4. **Code Reviews**:
+   - Use KISS as a guideline to identify and simplify overly complex solutions.
+
+---
+
+### **Examples of KISS in Action**
+
+1. **Over-Engineered**:
+   - Designing a complex event-driven architecture for a simple web app with minimal traffic.
+
+   **KISS Solution**:
+   - Use a straightforward monolithic architecture with REST APIs.
+
+2. **Over-Optimized Code**:
+   - Writing an intricate algorithm to solve a problem that could be handled by a basic `for` loop.
+
+   **KISS Solution**:
+   - Use a clear and simple algorithm unless performance testing identifies bottlenecks.
+
+3. **Excessive Abstraction**:
+   - Creating multiple wrapper classes for a function that could be implemented directly.
+
+   **KISS Solution**:
+   - Implement the function directly, with clear documentation.
+
+---
+
+
+The KISS principle encourages focusing on **simplicity, clarity, and practicality** in system design. By adhering to KISS, you create systems that are not only easier to build and maintain but also more resilient and scalable in the long run. It complements other principles like **YAGNI** (You Aren’t Gonna Need It) and **SOLID** to achieve well-balanced and efficient software designs.
 
 ## What is availability and partition tolerance?
 
