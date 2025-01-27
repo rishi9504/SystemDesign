@@ -369,13 +369,11 @@
 
 ### OSI Model
 
-![original-seven-layers-of-osi-model-1627523878-JYjV8oybcC.png](./images/system.design/original-seven-layers-of-osi-model-1627523878-JYjV8oybcC.png)
+[OSI Model](https://www.geeksforgeeks.org/open-systems-interconnection-model-osi/)
 
 ### DNS
 
-![dns.png](./images/system.design/dns.png)
-
-![dns.png](./images/system.design.3/dns.png)
+[DNS](https://aws.amazon.com/route53/what-is-dns/#:~:text=DNS%2C%20or%20the%20Domain%20Name,2.44)
 
 ### Network protocols
 
