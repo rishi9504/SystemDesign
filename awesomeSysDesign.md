@@ -852,9 +852,7 @@ For some systems like financial systems, consistency is very important. For othe
     - If there are enough tokens, we take one token out for each request, and the request goes through.
     - If there are not enough tokens, the request is dropped
 
-![rate_limiter_1.png](./images/system.design/rate_limiter_1.png)
 
-![rate_limiter_2.png](./images/system.design/rate_limiter_2.png)
 
 - The token bucket algorithm takes two parameters:
     - `Bucket size`: the maximum number of tokens allowed in the bucket
@@ -878,7 +876,6 @@ For some systems like financial systems, consistency is very important. For othe
     - Otherwise, the request is dropped.
     - Requests are pulled from the queue and processed at regular intervals.
 
-![rate_limiter_3.png](./images/system.design/rate_limiter_3.png)
 
 - Leaking bucket algorithm takes the following two parameters:
     - `Bucket size`: it is equal to the queue size. The queue holds the requests to be processed at
@@ -907,7 +904,6 @@ For some systems like financial systems, consistency is very important. For othe
     - The system allows a maximum of 3 requests per second.
     - In each second window, if more than 3 requests are received, extra requests are dropped
 
-![rate_limiter_4.png](./images/system.design/rate_limiter_4.png)
 
 - A major problem with this algorithm is that a burst of traffic at the edges of time windows
   could cause more requests than allowed quota to go through
@@ -917,7 +913,6 @@ For some systems like financial systems, consistency is very important. For othe
     - For the one-minute window between 2:00:30 and 2:01:30, 10 requests go through.
     - That is twice as many as allowed requests.
 
-![rate_limiter_5.png](./images/system.design/rate_limiter_5.png)
 
 ### Sliding window log algorithm
 
@@ -929,20 +924,8 @@ For some systems like financial systems, consistency is very important. For othe
     - Add timestamp of the new request to the log.
     - If the log size is the same or lower than the allowed count, a request is accepted. Otherwise, it is rejected
 
-![rate_limiter_6.png](./images/system.design/rate_limiter_6.png)
 
-- Example:
-    - In this example, the rate limiter allows 2 requests per minute. The time unit is 1 minute.
-    - The log is empty when a new request arrives at `1:00:01`. Thus, the request is allowed.
-    - A new request arrives at `1:00:30`, the timestamp `1:00:30` is inserted into the log. After the
-      insertion, the log size is `2`, not larger than the allowed count. Thus, the request is allowed.
-    - A new request arrives at `1:00:50`, and the timestamp is inserted into the log. After the
-      insertion, the log size is `3`, larger than the allowed size `2`. Therefore, this request is rejected
-      even though the timestamp remains in the log.
-    - A new request arrives at `1:01:40`. Requests in the range `[1:00:40,1:01:40)` are within the
-      latest time frame, but requests sent before `1:00:40` are outdated.
-    - Two outdated timestamps, `1:00:01` and `1:00:30`, are removed from the log.
-    - After the remove operation, the log size becomes `2`; therefore, the request is accepted
+
 
 - Pros:
     - Rate limiting implemented by this algorithm is very accurate. In any rolling window,
@@ -956,7 +939,6 @@ For some systems like financial systems, consistency is very important. For othe
 - The `sliding window counter algorithm` is a hybrid approach that combines the fixed window counter and sliding window
   log.
 
-![rate_limiter_7.png](./images/system.design/rate_limiter_7.png)
 
 - Example:
     - Let’s say I set a limit of `50` requests per minute on an API endpoint. The counter can be thought of like this:
@@ -975,7 +957,6 @@ For some systems like financial systems, consistency is very important. For othe
 
 ### Detailed design for rate limiter
 
-![rate_limiter_8.png](./images/system.design/rate_limiter_8.png)
 
 - The rate limiter is implemented as a `middleware`. It is placed in front of the API server.
 - `Rules` are stored on the disk. Workers frequently pull rules from the disk and store them in the cache.
@@ -988,13 +969,12 @@ For some systems like financial systems, consistency is very important. For othe
 
 ### Synchronization issue
 
-![rate_limiter_9.png](./images/system.design/rate_limiter_9.png)
 
 - `Synchronization issue` can be solved by using centralized data stores like `Redis`.
 
 ---
 
-## Desing Consistent hashing
+## Design Consistent hashing
 
 - `Consistent hashing` is a special kind of hashing such that when a
   hash table is re-sized and consistent hashing is used, only `k/n` keys need to be remapped on
@@ -1013,7 +993,6 @@ For some systems like financial systems, consistency is very important. For othe
 - Going clockwise, `key0` is stored on server 0; `key1` is stored on server 1; `key2` is stored on server 2
   and `key3` is stored on server 3
 
-![consistent_hashing_1.png](./images/system.design/consistent_hashing_1.png)
 
 ### Add a server in Consistent hashing
 
@@ -1024,14 +1003,12 @@ For some systems like financial systems, consistency is very important. For othe
   server it encounters by going clockwise from `key0`’s position on the ring.
 - The other keys are not redistributed based on consistent hashing algorithm.
 
-![consistent_hashing_2.png](./images/system.design/consistent_hashing_2.png)
 
 ### Remove a server in Consistent hashing
 
 - When a server is removed, only a small fraction of keys require redistribution with consistent hashing.
 - When server 1 is removed, only `key1` must be remapped to server 2. The rest of the keys are unaffected.
 
-![consistent_hashing_3.png](./images/system.design/consistent_hashing_3.png)
 
 ### Virtual nodes in Consistent hashing
 
