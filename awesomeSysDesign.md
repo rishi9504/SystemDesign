@@ -199,9 +199,7 @@
     - `Security`
     - `Cost`
 
-![1.png](./images/system.design.3/1.png)
 
-![2.png](./images/system.design.3/2.png)
 
 ---
 
@@ -327,20 +325,16 @@
 
 ## System Design Blueprint: The Ultimate Guide
 
-![sys_design_blue_print.png](./images/system.design/sys_design_blue_print_1.png)
 
-![sys_design_blue_print_2.png](./images/system.design/sys_design_blue_print_2.png)
 
 ---
 
 ## Universal patterns for building scalable systems:
 
-![common.png](images/common.png)
 
 
 [//]: # (## System Desing resources)
 
-[//]: # (![dZEbZaT.png]&#40;./images/system.design/dZEbZaT.png&#41;)
 
 ---
 
@@ -350,9 +344,7 @@
 
 ### TCP vs UDP
 
-![Graphic-UDP-Vs-TCP-Diagram_1150x685-700x417.png](./images/system.design/Graphic-UDP-Vs-TCP-Diagram_1150x685-700x417.png)
 
-![table-tcp-udp.png](./images/system.design/table-tcp-udp.png)
 
 - `TCP` is a connection-oriented protocol, which means that before data can be transferred, two computers must first
   establish a connection.
@@ -369,23 +361,19 @@
 
 ### OSI Model
 
-![original-seven-layers-of-osi-model-1627523878-JYjV8oybcC.png](./images/system.design/original-seven-layers-of-osi-model-1627523878-JYjV8oybcC.png)
+[OSI Model](https://www.geeksforgeeks.org/open-systems-interconnection-model-osi/)
 
 ### DNS
 
-![dns.png](./images/system.design/dns.png)
-
-![dns.png](./images/system.design.3/dns.png)
+[DNS](https://aws.amazon.com/route53/what-is-dns/#:~:text=DNS%2C%20or%20the%20Domain%20Name,2.44)
 
 ### Network protocols
 
-![1696882344725.gif](./images/system.design.3/1696882344725.gif)
 
 ---
 
 ## CDN
 
-![cdn_cover.png](./images/system.design/cdn_cover.png)
 
 - `CDN` is a system of distributed servers (network) that deliver webpages and other web content to a user based on the
   geographic locations of the user, the origin of the webpage and a content delivery server.
@@ -406,9 +394,7 @@
 - `Secure password storage` is the use of a cryptographic hash function to store passwords in a way that makes it difficult
   for an attacker to recover the original password.
 
-![security_1.png](images/system.design.4/security_1.png)
 
-![security_2.png](images/system.design.4/security_2.png)
 
 - `Salting` is the process of adding a random string of characters to a password before hashing it. This makes it more
   difficult for an attacker to crack the password using a precomputed hash table or rainbow table.
@@ -421,7 +407,6 @@
   secret key or a public/private key pair, which makes them secure and tamper-proof. JWTs can be used to authenticate
   users and authorize access to resources.
 
-![security_3.png](images/system.design.4/security_3.png)
 
 - `Cookies` - by storing a session token or JWT in a cookie, we can ensure that all subsequent requests will include it and allow the server to validate the current user session.
 
@@ -454,7 +439,6 @@
   distributing traffic across multiple servers. `reverse proxy` is used to provide security, load balancing, and caching
   for server requests.
 
-![forward_proxy_vs_reverse_proxy-f_mobile.png](./images/system.design/forward_proxy_vs_reverse_proxy-f_mobile.png)
 
 ## Load Balancing stategies
 
@@ -478,7 +462,6 @@
   each server does is roughly the same. If one server is much faster or slower than the others, this method will not
   work well.
 
-![the-five-most-common-balancing-methods.jpg](./images/system.design/the-five-most-common-balancing-methods.jpg)
 
 ## Consistent Hashing
 
@@ -495,7 +478,6 @@
   only a small portion of the keys need to be remapped. When a server is removed, the keys that were assigned to
   that server are evenly distributed among the remaining servers.
 
-![Consistent Hashing.png](./images/system.design/Consistent_Hashing.png)
 
 ---
 
@@ -536,7 +518,6 @@
 
 - `B-trees` are self-adjusting trees that can achieve multilevel indexing. They are a generalized form of Binary Search Trees. The data is stored in sorted order in the B-trees. B-tree achieves the efficient utilization of space in nodes, along with keeping the height of the tree small.
 
-![b-tree.png](images/system.design.5/b-tree.png)
 
 - `B+ trees` are an extension of B-trees. The major differences in the data structure are:
   - Only the leaf nodes store the record or reference to the record.
@@ -569,13 +550,6 @@
 
 ### SQL vs NoSQL
 
-![asidvsbase.webp](./images/system.design/asidvsbase.webp)
-
-![04fig04_alt.jpg](./images/system.design/04fig04_alt.jpg)
-
-![photo_2023-02-15_09-50-11.jpg](./images/system.design/photo_2023-02-15_09-50-11.jpg)
-
-![simple-map-for-db.png](images/system.design.4/simple-map-for-db.png)
 
 ### Replication
 
@@ -598,9 +572,7 @@
       complex to implement and it can lead to conflicts when the same data is modified concurrently on multiple
       databases.
 
-![replication.png](./images/system.design/replication.png)
 
-![replication_2.png](./images/system.design/replication_2.png)
 
 - A `master database` generally only supports `write` operations. A `slave database` gets copies of
   the data from the master database and only supports read operations. All the data-modifying
@@ -608,9 +580,7 @@
   applications require a much higher ratio of reads to writes; thus, the number of slave
   databases in a system is usually larger than the number of master databases.
 
-![replication_3.png](./images/system.design/replication_3.png)
 
-![leader leader replication.png](./images/system.design.4/leader_leader_replication.png)
 
 ### Quorum
 
@@ -630,7 +600,6 @@
 
 ### Sharding
 
-![sharding.png](images/system.design.4/sharding.png)
 
 - `Sharding` is the process of storing the same data set in multiple databases. Sharding is used to increase
   scalability and performance of databases. It is also used to distribute data geographically so that it can be
@@ -659,9 +628,7 @@
       database, the key is compared against the directories, and the record is inserted into the shard that is
       responsible for that key.
 
-![DB_image_2_cropped.png](./images/system.design/DB_image_2_cropped.png)
 
-![DB-Shard-Pic-1-e1513014455288.png](./images/system.design/DB-Shard-Pic-1-e1513014455288.png)
 
 ### Cache
 
@@ -673,7 +640,6 @@
     - `LFU Cache` - Least Frequently Used Cache
 - Generally, caching is used for read-heavy systems.
 
-![cache.png](images/system.design.5/cache.png)
 
 - [Сaching strategies](https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one):
     - `Cache-Aside` - The cache sits on the side and the application directly talks to both the cache and the database.
@@ -685,7 +651,6 @@
         3. If the data is not found in cache, we’ve cache miss. The application has to do some extra work. It
            queries the database to read the data, returns it to the client and stores the data in cache so the
            subsequent reads for the same data results in a cache hit.
-           ![cache_1.png](./images/system.design/cache_1.png)
 
     - `Read-Through Cache` - Read-through cache sits in-line with the database. When there is a cache miss, it loads
       missing data from database, populates the cache and returns it to the application. Read-through caches work best
@@ -693,7 +658,6 @@
         1. In cache-aside, the application is responsible for fetching data from the database and populating the cache.
            In read-through, this logic is usually supported by the library or stand-alone cache provider.
         2. Unlike cache-aside, the data model in read-through cache cannot be different than that of the database.
-           ![cache_2.png](./images/system.design/cache_2.png)
 
     - `Write-Through Cache` - data is first written to the cache and then to the database. The cache sits in-line with
       the database and writes always go through the cache to the main database. This helps cache maintain consistency
@@ -701,7 +665,6 @@
         1. The application writes the data directly to the cache.
         2. The cache updates the data in the main database. When the write is complete, both the cache and the database
            have the same value and the cache always remains consistent.
-           ![cache_3.png](./images/system.design/cache_3.png)
 
     - `Write-Around` - Here, data is written directly to the database and only the data that is read makes it way into
       the cache.
@@ -710,11 +673,9 @@
       application writes data to the cache which stores the data and acknowledges to the application immediately. Then
       later, the cache writes the data back to the database. Write back caches improve the write performance and are
       good for `write-heavy` workloads.
-      ![cache_4.png](./images/system.design/cache_4.png)
 
 ### Deduplication cache
 
-![3.png](./images/system.design.3/3.png)
 
 ### CAP Theorem
 
@@ -726,28 +687,20 @@
     - **Partition tolerance** - The system continues to operate despite an arbitrary number of messages being
       dropped (or delayed) by the network between nodes.
 
-![cap_theorem.webp](./images/system.design/cap_theorem.webp)
 
 - In a distributed system, `partitions` cannot be avoided, and when a partition occurs, we must
-  choose between `consistency` and `availability`. `n3` goes down and cannot
-  communicate with `n1` and `n2`. If clients write data to `n1` or `n2`, data cannot be propagated to
-  `n3`. If data is written to n3 but not propagated to `n1` and `n2` yet, `n1` and `n2` would have stale
-  data.
-- If we choose `consistency` over `availability` (`CP` system), we must block all write operations to
-  `n1` and `n2` to avoid data inconsistency among these three servers, which makes the system
-  unavailable. Bank systems usually have extremely high consistent requirements. For
-  example, it is crucial for a bank system to display the most up-to-date balance info. If
-  inconsistency occurs due to a network partition, the bank system returns an error before the
-  inconsistency is resolved
+  choose between `consistency` and `availability`.
+  
+- If we choose `consistency` over `availability` (`CP` system), It is crucial for a bank system to display the most up-to-date
+  balance info. If inconsistency occurs due to a network partition, the bank system returns an error before the inconsistency is resolved.
+  
 - If we choose `availability` over `consistency` (`AP` system), the system keeps accepting
-  reads, even though it might return `stale` data. For writes, `n1` and `n2` will keep accepting writes,
-  and data will be synced to `n3` when the network partition is resolved.
+  reads, even though it might return `stale` data. 
 
 For some systems like financial systems, consistency is very important. For others like TikTok, where it is OK if some users get access to certain videos later than the rest, we try to aim for availability over consistency. Even in these cases, we want our system to eventually have the same view of the data. And that is called eventual consistency, where systems become consistent eventually, if not immediately.
 
 ### PACELC Theorem
 
-![PACELC-theorem-diagram-1.webp](./images/system.design/PACELC-theorem-diagram-1.webp)
 
 ---
 
@@ -760,11 +713,7 @@ For some systems like financial systems, consistency is very important. For othe
     - `1 µs`= 10^-6 seconds = 1,000 ns
     - `1 ms` = 10^-3 seconds = 1,000 µs = 1,000,000 ns
 
-![numbers_1.png](./images/system.design/numbers_1.png)
 
-![numbers_3.png](./images/system.design/numbers_3.png)
-
-![numbers_2.png](./images/system.design/numbers_2.png)
 
 - By analyzing the numbers we get the following conclusions:
     - Memory is fast but the disk is slow.
@@ -775,7 +724,6 @@ For some systems like financial systems, consistency is very important. For othe
 
 ### Availability
 
-![numbers_4.png](./images/system.design/numbers_4.png)
 
 ---
 
@@ -798,7 +746,6 @@ For some systems like financial systems, consistency is very important. For othe
 - Elements can be added to the set, but not removed (though this can be addressed with a "counting" filter);
 - the more elements that are added to the set, the larger the probability of false positives.
 
-![bloom_filter.png](./images/system.design/bloom_filter.png)
 
 ---
 
@@ -808,13 +755,7 @@ For some systems like financial systems, consistency is very important. For othe
 - At-least-once guarantee
 - Exactly-once guarantee
 
-![message-delivery-guarantees.png](./images/system.design.3/message-delivery-guarantees.png)
 
-![At-most-once-guarantee.png](./images/system.design.3/At-most-once-guarantee.png)
-
-![At-least-once guarantee.png](./images/system.design.3/At-least-once-guarantee.png)
-
-![Exactly-once guarantee.png](./images/system.design.3/Exactly-once-guarantee.png)
 
 ---
 
@@ -822,13 +763,11 @@ For some systems like financial systems, consistency is very important. For othe
 
 - Scaling policies (metric-based, schedule-based, predictive)
 
-![autoscaling.png](./images/system.design.3/autoscaling.png)
 
 ---
 
 ## How to avoid cascading failures in a distributed system
 
-![cascading_failures_in_distributed_system.png](./images/system.design.3/cascading_failures_in_distributed_system.png)
 
 - `Caching` - key value store
 - `Gradual deploy`
@@ -842,9 +781,7 @@ For some systems like financial systems, consistency is very important. For othe
 - `Availability zone` is one or more data centers in region:
     - Example: 3 data centers in one availability zone or 2 data centers in another availability zone
 
-![region_availability_zone_1.png](./images/system.design.4/region_availability_zone_1.png)
 
-![region_availability_zone_2.png](./images/system.design.4/region_availability_zone_2.png)
 
 
 --- 
@@ -915,9 +852,7 @@ For some systems like financial systems, consistency is very important. For othe
     - If there are enough tokens, we take one token out for each request, and the request goes through.
     - If there are not enough tokens, the request is dropped
 
-![rate_limiter_1.png](./images/system.design/rate_limiter_1.png)
 
-![rate_limiter_2.png](./images/system.design/rate_limiter_2.png)
 
 - The token bucket algorithm takes two parameters:
     - `Bucket size`: the maximum number of tokens allowed in the bucket
@@ -941,7 +876,6 @@ For some systems like financial systems, consistency is very important. For othe
     - Otherwise, the request is dropped.
     - Requests are pulled from the queue and processed at regular intervals.
 
-![rate_limiter_3.png](./images/system.design/rate_limiter_3.png)
 
 - Leaking bucket algorithm takes the following two parameters:
     - `Bucket size`: it is equal to the queue size. The queue holds the requests to be processed at
@@ -970,7 +904,6 @@ For some systems like financial systems, consistency is very important. For othe
     - The system allows a maximum of 3 requests per second.
     - In each second window, if more than 3 requests are received, extra requests are dropped
 
-![rate_limiter_4.png](./images/system.design/rate_limiter_4.png)
 
 - A major problem with this algorithm is that a burst of traffic at the edges of time windows
   could cause more requests than allowed quota to go through
@@ -980,7 +913,6 @@ For some systems like financial systems, consistency is very important. For othe
     - For the one-minute window between 2:00:30 and 2:01:30, 10 requests go through.
     - That is twice as many as allowed requests.
 
-![rate_limiter_5.png](./images/system.design/rate_limiter_5.png)
 
 ### Sliding window log algorithm
 
@@ -992,20 +924,8 @@ For some systems like financial systems, consistency is very important. For othe
     - Add timestamp of the new request to the log.
     - If the log size is the same or lower than the allowed count, a request is accepted. Otherwise, it is rejected
 
-![rate_limiter_6.png](./images/system.design/rate_limiter_6.png)
 
-- Example:
-    - In this example, the rate limiter allows 2 requests per minute. The time unit is 1 minute.
-    - The log is empty when a new request arrives at `1:00:01`. Thus, the request is allowed.
-    - A new request arrives at `1:00:30`, the timestamp `1:00:30` is inserted into the log. After the
-      insertion, the log size is `2`, not larger than the allowed count. Thus, the request is allowed.
-    - A new request arrives at `1:00:50`, and the timestamp is inserted into the log. After the
-      insertion, the log size is `3`, larger than the allowed size `2`. Therefore, this request is rejected
-      even though the timestamp remains in the log.
-    - A new request arrives at `1:01:40`. Requests in the range `[1:00:40,1:01:40)` are within the
-      latest time frame, but requests sent before `1:00:40` are outdated.
-    - Two outdated timestamps, `1:00:01` and `1:00:30`, are removed from the log.
-    - After the remove operation, the log size becomes `2`; therefore, the request is accepted
+
 
 - Pros:
     - Rate limiting implemented by this algorithm is very accurate. In any rolling window,
@@ -1019,7 +939,6 @@ For some systems like financial systems, consistency is very important. For othe
 - The `sliding window counter algorithm` is a hybrid approach that combines the fixed window counter and sliding window
   log.
 
-![rate_limiter_7.png](./images/system.design/rate_limiter_7.png)
 
 - Example:
     - Let’s say I set a limit of `50` requests per minute on an API endpoint. The counter can be thought of like this:
@@ -1038,7 +957,6 @@ For some systems like financial systems, consistency is very important. For othe
 
 ### Detailed design for rate limiter
 
-![rate_limiter_8.png](./images/system.design/rate_limiter_8.png)
 
 - The rate limiter is implemented as a `middleware`. It is placed in front of the API server.
 - `Rules` are stored on the disk. Workers frequently pull rules from the disk and store them in the cache.
@@ -1051,13 +969,12 @@ For some systems like financial systems, consistency is very important. For othe
 
 ### Synchronization issue
 
-![rate_limiter_9.png](./images/system.design/rate_limiter_9.png)
 
 - `Synchronization issue` can be solved by using centralized data stores like `Redis`.
 
 ---
 
-## Desing Consistent hashing
+## Design Consistent hashing
 
 - `Consistent hashing` is a special kind of hashing such that when a
   hash table is re-sized and consistent hashing is used, only `k/n` keys need to be remapped on
@@ -1076,7 +993,6 @@ For some systems like financial systems, consistency is very important. For othe
 - Going clockwise, `key0` is stored on server 0; `key1` is stored on server 1; `key2` is stored on server 2
   and `key3` is stored on server 3
 
-![consistent_hashing_1.png](./images/system.design/consistent_hashing_1.png)
 
 ### Add a server in Consistent hashing
 
@@ -1087,14 +1003,12 @@ For some systems like financial systems, consistency is very important. For othe
   server it encounters by going clockwise from `key0`’s position on the ring.
 - The other keys are not redistributed based on consistent hashing algorithm.
 
-![consistent_hashing_2.png](./images/system.design/consistent_hashing_2.png)
 
 ### Remove a server in Consistent hashing
 
 - When a server is removed, only a small fraction of keys require redistribution with consistent hashing.
 - When server 1 is removed, only `key1` must be remapped to server 2. The rest of the keys are unaffected.
 
-![consistent_hashing_3.png](./images/system.design/consistent_hashing_3.png)
 
 ### Virtual nodes in Consistent hashing
 

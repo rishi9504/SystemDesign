@@ -11,6 +11,9 @@
 - Google search
 - Netflix
 - Reddit
+- URL Shortener [URL Shortener](https://www.hellointerview.com/learn/system-design/problem-breakdowns/bitly)
+  ![e555d3d4a54f516eeb857c98021f2ab9](https://github.com/user-attachments/assets/d9704caa-33bb-4c00-a90d-0de7219e98d3)
+
 - Uber : [Uber](https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber) [Detailed Questions Readme]()
 
 - ![7d9ec3dbaa245e568ad98d2274a21015](https://github.com/user-attachments/assets/887f31b7-e274-4756-8247-f5d112db4b78)
