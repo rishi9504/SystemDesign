@@ -26,6 +26,14 @@ class ParkingLot:
         levels attribute of the ParkingLot object
         """
 
+    def __repr__(self):
+        """Return a string representation of the ParkingLot object."""
+        return "ParkingLot(levels={})".format(len(self.levels))
+
+    def __str__(self):
+        """Return a string representation of the ParkingLot object."""
+        return "Parking Lot with {} levels".format(len(self.levels))
+
     def find_parking_spot(self, vehicle):
         """
         Find a parking spot for the given vehicle in the parking lot.
