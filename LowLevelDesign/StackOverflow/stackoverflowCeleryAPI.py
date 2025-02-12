@@ -3,156 +3,107 @@ from threading import Lock
 import uuid
 from datetime import datetime
 import redis
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, Column, String, Integer, Text, ForeignKey, Table
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.exc import IntegrityError
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from celery import Celery
-from sqlalchemy import create_engine
 
 # Initialize database engine
 db_engine = create_engine("postgresql://postgres:password@localhost/stack_overflow")
-
-# Initialize Redis and Database Session
-r = redis.Redis(host='localhost', port=6379, db=0)
 Session = sessionmaker(bind=db_engine)
 session = Session()
+Base = declarative_base()
 
-# Initialize FastAPI for creating RESTful API endpoints
+# Initialize Redis
+r = redis.Redis(host='localhost', port=6379, db=0)
+
+# Initialize FastAPI
 app = FastAPI()
 
-# Initialize Celery for background job processing
+# Initialize Celery
 celery_app = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
 
-# Enum for Vote Type (Upvote or Downvote)
+# Enum for Vote Type
 class VoteType(Enum):
     UPVOTE = 1
     DOWNVOTE = -1
 
-# User Class to manage user information and reputation
-class User:
-    def __init__(self, username):
-        self.user_id = str(uuid.uuid4())  # Generate unique user ID
-        self.username = username
-        self.reputation = 0  # Initial reputation score
+# Database Models
+class Question(Base):
+    __tablename__ = 'questions'
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    title = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
+    tags = Column(String, nullable=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    votes = Column(Integer, default=0)
+    answers = relationship("Answer", back_populates="question")
 
-    def update_reputation(self, points):
-        """Updates user reputation using Redis atomic increment."""
-        r.incrby(f"user:{self.user_id}:reputation", points)
+class Answer(Base):
+    __tablename__ = 'answers'
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    content = Column(Text, nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    question_id = Column(String, ForeignKey("questions.id"), nullable=False)
+    votes = Column(Integer, default=0)
+    question = relationship("Question", back_populates="answers")
 
-# Question Class to manage questions, answers, comments, and votes
-class Question:
-    def __init__(self, title, content, tags, user):
-        self.question_id = str(uuid.uuid4())  # Generate unique question ID
-        self.title = title
-        self.content = content
-        self.tags = tags  # List of associated tags
-        self.user = user  # User who posted the question
-        self.answers = []  # List of answers
-        self.comments = []  # List of comments
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    username = Column(String, unique=True, nullable=False)
+    reputation = Column(Integer, default=0)
 
-    def add_answer(self, answer):
-        """Adds an answer to the question."""
-        self.answers.append(answer)
+# Create Tables
+Base.metadata.create_all(db_engine)
 
-    def add_comment(self, comment):
-        """Adds a comment to the question."""
-        self.comments.append(comment)
-
-    def vote(self, vote_type):
-        """Handles voting for the question using Redis."""
-        r.incrby(f"question:{self.question_id}:votes", vote_type.value)
-
-# Answer Class to manage answers and their votes
-class Answer:
-    def __init__(self, content, user):
-        self.answer_id = str(uuid.uuid4())  # Generate unique answer ID
-        self.content = content
-        self.user = user  # User who posted the answer
-        self.comments = []  # List of comments on the answer
-
-    def add_comment(self, comment):
-        """Adds a comment to the answer."""
-        self.comments.append(comment)
-
-    def vote(self, vote_type):
-        """Handles voting for the answer using Redis."""
-        r.incrby(f"answer:{self.answer_id}:votes", vote_type.value)
-
-# Comment Class to manage comments on questions and answers
-class Comment:
-    def __init__(self, content, user):
-        self.comment_id = str(uuid.uuid4())  # Generate unique comment ID
-        self.content = content
-        self.user = user  # User who posted the comment
-
-# StackOverflow System Class to manage overall functionality
-class StackOverflow:
-    def __init__(self):
-        self.questions = []  # List of all posted questions
-
-    def post_question(self, title, content, tags, user):
-        """Creates and stores a new question."""
-        question = Question(title, content, tags, user)
-        self.questions.append(question)
-        return question
-
-    def search_questions(self, keyword=None, tags=None, username=None):
-        """Search for questions based on keyword, tags, or username."""
-        results = []
-        for question in self.questions:
-            if (keyword and keyword.lower() in question.title.lower()) or \
-               (tags and any(tag in question.tags for tag in tags)) or \
-               (username and question.user.username == username):
-                results.append(question)
-        return results
-
-    def persist_votes_to_db(self):
-        """Periodically persist vote counts from Redis to the database."""
-        for question in self.questions:
-            votes = int(r.get(f"question:{question.question_id}:votes") or 0)
-            session.execute("UPDATE questions SET votes = :votes WHERE question_id = :id", 
-                            {"votes": votes, "id": question.question_id})
-        session.commit()
-
-# Celery Task for Background Vote Syncing
-@celery_app.task
-def sync_votes_to_db():
-    """Background task to periodically sync vote counts from Redis to the database."""
-    stack_overflow = StackOverflow()
-    stack_overflow.persist_votes_to_db()
-
-# FastAPI Endpoints for API integration
+# API Endpoints
 @app.post("/questions/")
 def create_question(
     title: str = Form(...), 
     content: str = Form(...), 
-    tags: str = Form(...),  # Receive tags as a comma-separated string
+    tags: str = Form(...), 
     username: str = Form(...), 
-    file: UploadFile = File(None)  # Optional file upload
+    # file: UploadFile = File(None)
 ):
-    """API endpoint to create a new question with optional file upload."""
-    user = User(username)
-    tag_list = tags.split(",")  # Convert comma-separated tags into a list
-    question = stack_overflow.post_question(title, content, tag_list, user)
+    user = session.query(User).filter_by(username=username).first()
+    if not user:
+        user = User(username=username)
+        session.add(user)
+        session.commit()
     
-    if file:
-        file_location = f"uploads/{file.filename}"
-        with open(file_location, "wb") as f:
-            f.write(file.file.read())
-        return {"question_id": question.question_id, "message": "Question posted successfully with file upload", "file": file_location}
+    question = Question(title=title, content=content, tags=tags, user_id=user.id)
+    session.add(question)
+    session.commit()
     
-    return {"question_id": question.question_id, "message": "Question posted successfully"}
+    # if file:
+    #     file_location = f"uploads/{file.filename}"
+    #     with open(file_location, "wb") as f:
+    #         f.write(file.file.read())
+    #     return {"question_id": question.id, "message": "Question posted successfully with file upload", "file": file_location}
+    
+    return {"question_id": question.id, "message": "Question posted successfully"}
 
-@app.get("/questions/search/")
-def search_questions(keyword: str = None, tags: str = None, username: str = None):
-    """API endpoint to search for questions."""
-    tag_list = tags.split(",") if tags else None
-    results = stack_overflow.search_questions(keyword, tag_list, username)
-    return [{"question_id": q.question_id, "title": q.title} for q in results]
+@app.post("/questions/{question_id}/answers/")
+def create_answer(question_id: str, content: str = Form(...), username: str = Form(...)):
+    user = session.query(User).filter_by(username=username).first()
+    if not user:
+        user = User(username=username)
+        session.add(user)
+        session.commit()
+    
+    answer = Answer(content=content, user_id=user.id, question_id=question_id)
+    session.add(answer)
+    session.commit()
+    return {"answer_id": answer.id, "message": "Answer posted successfully"}
 
 @app.post("/questions/{question_id}/vote/")
 def vote_question(question_id: str, vote_type: VoteType):
-    """API endpoint to vote on a question."""
-    r.incrby(f"question:{question_id}:votes", vote_type.value)
-    sync_votes_to_db.delay()  # Schedule vote sync as a background job
-    return {"message": "Vote registered and will be synced"}
+    question = session.query(Question).filter_by(id=question_id).first()
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    question.votes += vote_type.value
+    session.commit()
+    return {"message": "Vote registered"}
