@@ -4,13 +4,14 @@ import uuid
 from datetime import datetime
 import redis
 from sqlalchemy import create_engine, Column, String, Integer, Text, ForeignKey, Table
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import IntegrityError
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form,Query
 from celery import Celery
 
 # Initialize database engine
-db_engine = create_engine("postgresql://postgres:password@localhost/stack_overflow")
+db_engine = create_engine("postgresql://hrkumar:password@localhost/stack_overflow")
 Session = sessionmaker(bind=db_engine)
 session = Session()
 Base = declarative_base()
@@ -58,6 +59,15 @@ class User(Base):
 # Create Tables
 Base.metadata.create_all(db_engine)
 
+# Celery task for background vote syncing
+@celery_app.task
+def sync_votes_to_db():
+    questions = session.query(Question).all()
+    for ques in questions:
+        votes = int(r.get(f"question:{ques.id}:votes")or 0)
+        ques.votes = votes
+    session.commit()    
+
 # API Endpoints
 @app.post("/questions/")
 def create_question(
@@ -65,7 +75,6 @@ def create_question(
     content: str = Form(...), 
     tags: str = Form(...), 
     username: str = Form(...), 
-    # file: UploadFile = File(None)
 ):
     user = session.query(User).filter_by(username=username).first()
     if not user:
@@ -76,12 +85,7 @@ def create_question(
     question = Question(title=title, content=content, tags=tags, user_id=user.id)
     session.add(question)
     session.commit()
-    
-    # if file:
-    #     file_location = f"uploads/{file.filename}"
-    #     with open(file_location, "wb") as f:
-    #         f.write(file.file.read())
-    #     return {"question_id": question.id, "message": "Question posted successfully with file upload", "file": file_location}
+    r.set(f"question:{question.id}:votes",0)
     
     return {"question_id": question.id, "message": "Question posted successfully"}
 
@@ -99,11 +103,17 @@ def create_answer(question_id: str, content: str = Form(...), username: str = Fo
     return {"answer_id": answer.id, "message": "Answer posted successfully"}
 
 @app.post("/questions/{question_id}/vote/")
-def vote_question(question_id: str, vote_type: VoteType):
+def vote_question(question_id: str, vote_type: int=Query(...)):
+    if vote_type not in [1,-1]:
+        raise HTTPException(status_code=400, detail="Vote type should be 1 or -1")
+    vote_enum = VoteType(vote_type)
     question = session.query(Question).filter_by(id=question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     
-    question.votes += vote_type.value
-    session.commit()
+    #store vote in redis instead of directly updating the db
+    r.incrby(f"question:{question_id}:votes",vote_enum.value)
+    sync_votes_to_db.delay() #schedule vote sync as bg job
     return {"message": "Vote registered"}
+
+
