@@ -5,8 +5,12 @@ from datetime import datetime
 import redis
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from celery import Celery
+from sqlalchemy import create_engine
+
+# Initialize database engine
+db_engine = create_engine("postgresql://postgres:password@localhost/stack_overflow")
 
 # Initialize Redis and Database Session
 r = redis.Redis(host='localhost', port=6379, db=0)
@@ -119,16 +123,31 @@ def sync_votes_to_db():
 
 # FastAPI Endpoints for API integration
 @app.post("/questions/")
-def create_question(title: str, content: str, tags: list, username: str):
-    """API endpoint to create a new question."""
+def create_question(
+    title: str = Form(...), 
+    content: str = Form(...), 
+    tags: str = Form(...),  # Receive tags as a comma-separated string
+    username: str = Form(...), 
+    file: UploadFile = File(None)  # Optional file upload
+):
+    """API endpoint to create a new question with optional file upload."""
     user = User(username)
-    question = stack_overflow.post_question(title, content, tags, user)
+    tag_list = tags.split(",")  # Convert comma-separated tags into a list
+    question = stack_overflow.post_question(title, content, tag_list, user)
+    
+    if file:
+        file_location = f"uploads/{file.filename}"
+        with open(file_location, "wb") as f:
+            f.write(file.file.read())
+        return {"question_id": question.question_id, "message": "Question posted successfully with file upload", "file": file_location}
+    
     return {"question_id": question.question_id, "message": "Question posted successfully"}
 
 @app.get("/questions/search/")
-def search_questions(keyword: str = None, tags: list = None, username: str = None):
+def search_questions(keyword: str = None, tags: str = None, username: str = None):
     """API endpoint to search for questions."""
-    results = stack_overflow.search_questions(keyword, tags, username)
+    tag_list = tags.split(",") if tags else None
+    results = stack_overflow.search_questions(keyword, tag_list, username)
     return [{"question_id": q.question_id, "title": q.title} for q in results]
 
 @app.post("/questions/{question_id}/vote/")
@@ -137,28 +156,3 @@ def vote_question(question_id: str, vote_type: VoteType):
     r.incrby(f"question:{question_id}:votes", vote_type.value)
     sync_votes_to_db.delay()  # Schedule vote sync as a background job
     return {"message": "Vote registered and will be synced"}
-
-# Simulation for testing functionalities
-if __name__ == "__main__":
-    stack_overflow = StackOverflow()
-    user1 = User("Alice")
-    user2 = User("Bob")
-
-    # User posts a question
-    question = stack_overflow.post_question("How to implement a singleton in Python?", "I need help with singletons.", ["Python", "Design Patterns"], user1)
-    
-    # User answers the question
-    answer = Answer("You can use a metaclass or decorators.", user2)
-    question.add_answer(answer)
-    
-    # User votes on the answer
-    answer.vote(VoteType.UPVOTE)
-    user2.update_reputation(10)
-    
-    # Persist votes to database periodically using Celery
-    sync_votes_to_db.delay()
-    
-    # Searching for questions
-    results = stack_overflow.search_questions(keyword="singleton")
-    for q in results:
-        print(f"Found Question: {q.title}")
