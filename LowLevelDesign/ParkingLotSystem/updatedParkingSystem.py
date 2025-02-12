@@ -11,6 +11,7 @@ class VehicleType(Enum):
     MOTORCYCLE = "Motorcycle"
     TRUCK = "Truck"
 
+#Enum for Spot Status
 class SpotStatus(Enum):
     OCCUPIED = "Occupied"
     AVAILABLE = "Available"
