@@ -97,9 +97,15 @@ class TaskManagementSystem:
     and data persistence.
     """
     def __init__(self, db_path: str = "tasks.db"):
+        """
+        Initialize the Task Management System with the given database path.
+
+        Args:
+            db_path (str): The path to the SQLite database file.
+        """
         self.db_manager = DatabaseManager(db_path)
-        self.task_locks: Dict[str, threading.Lock] = {}
-        self.global_lock = threading.Lock()
+        self.task_locks: Dict[str, threading.Lock] = {}  # Mapping of task titles to locks
+        self.global_lock = threading.Lock()  # Global lock for concurrent access control
 
     def _get_task_lock(self, title: str) -> threading.Lock:
         """Get or create a lock for a specific task"""
